@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TED Talk Mastery Quiz — LSC 1503</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e8f5e9;
+  --surface: #f1faf2;
+  --card: #ffffff;
+  --border: #b7debb;
+  --gold: #2e7d32;
+  --gold-light: #388e3c;
+  --gold-dim: #81c784;
+  --red: #e05252;
+  --green: #2e7d32;
+  --text: #1b3a1c;
+  --muted: #5a8060;
+  --spotlight: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(76,175,80,0.12) 0%, transparent 70%);
+}
+ 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  background-image: var(--spotlight);
+}
+ 
+/* ─── HEADER ─── */
+.hero {
+  text-align: center;
+  padding: 56px 24px 40px;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 48px;
+  background: linear-gradient(to bottom, #2e7d32, transparent);
+}
+.hero-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background: rgba(76,175,80,0.05);
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 300;
+  max-width: 480px;
+  margin: 0 auto 28px;
+}
+.info-strip {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.info-chip {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.info-chip strong { color: var(--text); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+ 
+/* ─── STUDENT INFO ─── */
+.student-form {
+  max-width: 600px;
+  margin: 0 auto 40px;
+  padding: 0 24px;
+}
+.field-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.field-row input {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .2s;
+}
+.field-row input:focus { border-color: var(--gold); }
+.field-row input::placeholder { color: var(--muted); }
+ 
+/* ─── PROGRESS ─── */
+.progress-wrap {
+  max-width: 760px;
+  margin: 0 auto 32px;
+  padding: 0 24px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  border-radius: 2px;
+  transition: width .4s ease;
+  width: 0%;
+}
+ 
+/* ─── SECTION LABEL ─── */
+.section-divider {
+  max-width: 760px;
+  margin: 0 auto 16px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-divider span {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.section-line { flex: 1; height: 1px; background: var(--border); }
+ 
+/* ─── QUESTION CARD ─── */
+.questions-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+ 
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 24px 20px;
+  transition: border-color .3s;
+  position: relative;
+  overflow: hidden;
+}
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--border);
+  transition: background .3s;
+}
+.q-card.answered::before { background: var(--gold); }
+.q-card.correct-card::before { background: var(--green); }
+.q-card.wrong-card::before { background: var(--red); }
+ 
+.q-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.q-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(76,175,80,0.1);
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  letter-spacing: 1px;
+}
+ 
+.q-text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  color: var(--text);
+}
+ 
+.options { display: flex; flex-direction: column; gap: 9px; }
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .2s;
+  font-size: 14px;
+  line-height: 1.4;
+  background: var(--surface);
+}
+.opt:hover:not(.disabled) {
+  border-color: var(--gold-dim);
+  background: rgba(76,175,80,0.04);
+}
+.opt.selected { border-color: var(--gold); background: rgba(76,175,80,0.08); }
+.opt.correct  { border-color: var(--green); background: rgba(76,175,130,0.10); color: var(--green); }
+.opt.wrong    { border-color: var(--red);   background: rgba(224,82,82,0.08);   color: var(--red); }
+.opt.reveal   { border-color: var(--green); background: rgba(76,175,130,0.06); color: var(--green); opacity: 0.7; }
+.opt.disabled { cursor: default; }
+.opt-letter {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  margin-top: 1px;
+  transition: all .2s;
+}
+.opt.selected .opt-letter { border-color: var(--gold); color: var(--gold); background: rgba(76,175,80,0.15); }
+.opt.correct .opt-letter  { border-color: var(--green); color: var(--green); }
+.opt.wrong .opt-letter    { border-color: var(--red);   color: var(--red); }
+ 
+.feedback-msg {
+  display: none;
+  margin-top: 12px;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+.feedback-msg.show { display: block; }
+.feedback-msg.ok  { background: rgba(76,175,130,0.1);  color: #6ed4a7; border-left: 2px solid var(--green); }
+.feedback-msg.err { background: rgba(224,82,82,0.08);  color: #e8918c; border-left: 2px solid var(--red); }
+ 
+/* ─── SUBMIT BTN ─── */
+.submit-wrap {
+  max-width: 760px;
+  margin: 8px auto 48px;
+  padding: 0 24px;
+  text-align: center;
+}
+#submitBtn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  background: linear-gradient(135deg, #388e3c, #66bb6a);
+  color: #0d0d0f;
+  border: none;
+  padding: 16px 52px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all .25s;
+  box-shadow: 0 4px 24px rgba(76,175,80,0.25);
+}
+#submitBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(76,175,80,0.35); }
+#submitBtn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+ 
+/* ─── RESULTS PANEL ─── */
+#resultsPanel {
+  display: none;
+  max-width: 760px;
+  margin: 0 auto 64px;
+  padding: 0 24px;
+}
+.results-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.results-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.score-circle {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  background: radial-gradient(circle, rgba(76,175,80,0.1), transparent);
+  box-shadow: 0 0 40px rgba(76,175,80,0.2);
+}
+.score-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+.score-label {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+.result-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+.result-sub { color: var(--muted); font-size: 14px; max-width: 420px; margin: 0 auto 28px; line-height: 1.6; }
+ 
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.stat-item { text-align: center; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); }
+.stat-lbl { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+ 
+.action-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-retry {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: transparent;
+  padding: 12px 32px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-retry:hover { background: rgba(76,175,80,0.08); }
+.btn-cert {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #388e3c, #66bb6a);
+  color: #0d0d0f;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-cert:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(76,175,80,0.3); }
+ 
+/* ─── CERTIFICATE ─── */
+#certSection {
+  display: none;
+  max-width: 820px;
+  margin: 0 auto 64px;
+  padding: 0 24px;
+}
+.cert {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1faf2 50%, #e8f5e9 100%);
+  border: 2px solid var(--gold-dim);
+  border-radius: 20px;
+  padding: 60px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cert::before, .cert::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,175,80,0.07), transparent);
+}
+.cert::before { top: -60px; left: -60px; }
+.cert::after  { bottom: -60px; right: -60px; }
+.cert-corner {
+  position: absolute;
+  width: 50px; height: 50px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+  border-width: 0;
+}
+.cert-corner.tl { top: 16px; left: 16px; border-top-width: 2px; border-left-width: 2px; }
+.cert-corner.tr { top: 16px; right: 16px; border-top-width: 2px; border-right-width: 2px; }
+.cert-corner.bl { bottom: 16px; left: 16px; border-bottom-width: 2px; border-left-width: 2px; }
+.cert-corner.br { bottom: 16px; right: 16px; border-bottom-width: 2px; border-right-width: 2px; }
+.cert-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 6px;
+}
+.cert-ted {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+.cert-ted span { color: var(--red); }
+.cert-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 20px auto;
+}
+.cert-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.cert-presents {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.cert-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--gold-light);
+  margin-bottom: 4px;
+}
+.cert-id {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+.cert-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0 auto 20px;
+}
+.cert-body strong { color: var(--text); }
+.cert-score-badge {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(76,175,80,0.1);
+  border: 1px solid var(--gold-dim);
+  padding: 6px 24px;
+  border-radius: 30px;
+  margin-bottom: 28px;
+}
+.cert-sigs {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+.cert-sig {
+  text-align: center;
+  min-width: 140px;
+}
+.cert-sig-line {
+  width: 140px;
+  height: 1px;
+  background: var(--gold-dim);
+  margin: 0 auto 6px;
+}
+.cert-sig-name { font-size: 13px; color: var(--text); font-weight: 500; }
+.cert-sig-role { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+.cert-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 28px;
+  letter-spacing: 1px;
+}
+ 
+.btn-print {
+  display: block;
+  margin: 20px auto 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #388e3c, #66bb6a);
+  color: #0d0d0f;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-print:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(76,175,80,0.3); }
+ 
+/* ─── FOOTER ─── */
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .5px;
+}
+ 
+@media print {
+  body { background: white; }
+  .hero, .student-form, .progress-wrap, .section-divider, .questions-wrap, .submit-wrap, #resultsPanel .action-row, .btn-print, footer { display: none !important; }
+  #certSection { display: block !important; padding: 0; max-width: 100%; }
+  .cert {
+    background: white !important;
+    border-color: #4caf50 !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .cert-ted { color: #2e7d32 !important; }
+  .cert-ted span { color: #cc3333 !important; }
+  .cert-name { color: #2e7d32 !important; }
+  .cert-logo, .cert-title, .cert-id, .cert-sig-role, .cert-date { color: #666 !important; }
+  .cert-presents, .cert-body { color: #444 !important; }
+  .cert-body strong { color: #111 !important; }
+  .cert-score-badge { color: #2e7d32 !important; border-color: #4caf50 !important; background: #f1faf2 !important; }
+  .cert-divider, .cert-sig-line { background: #4caf50 !important; }
+  .cert-corner { border-color: #4caf50 !important; }
+}
+</style>
+</head>
+<body>
+ 
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">LSC 1503 · Professional Spoken Communication</div>
+  <h1>TED Talk <em>Mastery</em> Quiz</h1>
+  <p class="hero-sub">Test your knowledge of TED Talk structure, hooks, visual design, Ikigai, and assessment requirements.</p>
+  <div class="info-strip">
+    <div class="info-chip"><div class="dot"></div>40 Questions</div>
+    <div class="info-chip"><div class="dot"></div>Pass Mark: <strong>&nbsp;80%</strong></div>
+    <div class="info-chip"><div class="dot"></div>Certificate on Pass</div>
+  </div>
+</div>
+ 
+<!-- STUDENT INFO -->
+<div class="student-form">
+  <div class="field-row">
+    <input type="text" id="stuName" placeholder="Your Full Name">
+    <input type="text" id="stuId" placeholder="Student ID">
+  </div>
+</div>
+ 
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-header">
+    <span id="progLabel">0 / 40 answered</span>
+    <span id="progPct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+</div>
+ 
+<!-- QUESTIONS -->
+<div id="questionsContainer"></div>
+ 
+<!-- SUBMIT -->
+<div class="submit-wrap">
+  <button id="submitBtn" onclick="submitQuiz()">Submit My Answers</button>
+</div>
+ 
+<!-- RESULTS -->
+<div id="resultsPanel">
+  <div class="results-card">
+    <div class="score-circle">
+      <div class="score-pct" id="resPct">—</div>
+      <div class="score-label">SCORE</div>
+    </div>
+    <h2 class="result-title" id="resTitle"></h2>
+    <p class="result-sub" id="resSub"></p>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-num" id="resCorrect">—</div><div class="stat-lbl">CORRECT</div></div>
+      <div class="stat-item"><div class="stat-num" id="resWrong">—</div><div class="stat-lbl">INCORRECT</div></div>
+      <div class="stat-item"><div class="stat-num" id="resTotal">40</div><div class="stat-lbl">TOTAL</div></div>
+    </div>
+    <div class="action-row">
+      <button class="btn-retry" onclick="retryQuiz()">Try Again</button>
+      <button class="btn-cert" id="certBtn" onclick="showCert()" style="display:none">View Certificate 🎓</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- CERTIFICATE -->
+<div id="certSection">
+  <div class="cert">
+    <div class="cert-corner tl"></div>
+    <div class="cert-corner tr"></div>
+    <div class="cert-corner bl"></div>
+    <div class="cert-corner br"></div>
+    <div class="cert-logo">Higher Colleges of Technology · UAE</div>
+    <div class="cert-ted">TED<span>x</span></div>
+    <div class="cert-title">Certificate of Achievement</div>
+    <div class="cert-divider"></div>
+    <div class="cert-presents">This certificate is proudly awarded to</div>
+    <div class="cert-name" id="certName">—</div>
+    <div class="cert-id" id="certId"></div>
+    <div class="cert-body">
+      for successfully completing the <strong>TED Talk Mastery Quiz</strong><br>
+      in LSC 1503: Professional Spoken Communication,<br>
+      demonstrating knowledge of TED Talk structure, Ikigai,<br>
+      hooks, visual communication, and assessment requirements.
+    </div>
+    <div class="cert-score-badge" id="certScore">Score: —</div>
+    <div class="cert-sigs">
+      <div class="cert-sig">
+        <div class="cert-sig-line"></div>
+        <div class="cert-sig-name">Nazila Motahari</div>
+        <div class="cert-sig-role">Instructor · LSC 1503</div>
+      </div>
+      <div class="cert-sig">
+        <div class="cert-sig-line"></div>
+        <div class="cert-sig-name">HCT</div>
+        <div class="cert-sig-role">Higher Colleges of Technology</div>
+      </div>
+    </div>
+    <div class="cert-date" id="certDate"></div>
+  </div>
+  <button class="btn-print" onclick="window.print()">🖨 Print Certificate</button>
+</div>
+ 
+<footer>Designed by Nazila Motahari · LSC 1503 Professional Spoken Communication · HCT · 2025–2026</footer>
+ 
+<script>
+const questions = [
+  // ── SECTION 1: TED Talk Basics ──────────────────────────────
+  {
+    section: "TED Talk Basics",
+    text: "What does the acronym TED stand for?",
+    options: ["Teaching, Education, Design", "Technology, Entertainment, Design", "Training, Engagement, Development", "Thinking, Expression, Delivery"],
+    answer: 1,
+    feedback: "TED stands for Technology, Entertainment, Design — a non-profit organisation dedicated to spreading ideas."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "How long should your student TED Talk be for LSC 1503?",
+    options: ["1–2 minutes", "10–15 minutes", "3–5 minutes", "7–10 minutes"],
+    answer: 2,
+    feedback: "Student TED Talks in LSC 1503 are 3–5 minutes — short, focused, and impactful."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "Which of the following best describes a TED Talk?",
+    options: ["A formal academic lecture with detailed notes", "A short, powerful talk that shares one big idea worth spreading", "A group debate on a controversial topic", "A reading from a written essay"],
+    answer: 1,
+    feedback: "TED Talks are short, powerful presentations built around one clear idea worth spreading."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "Which of these is NOT one of the five main parts of a TED Talk?",
+    options: ["Hook", "Literature Review", "Personal Story", "Call to Action"],
+    answer: 1,
+    feedback: "A Literature Review belongs to academic writing. TED Talks use: Hook → Personal Story → 3 Core Points → Conclusion/Call to Action."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "What is the correct order of a well-structured TED Talk?",
+    options: ["Story → Hook → Points → Conclusion", "Hook → Personal Story → 3 Core Points → Conclusion", "Introduction → Body → Data → Conclusion", "Points → Hook → Story → Call to Action"],
+    answer: 1,
+    feedback: "The structure is: Hook (grab attention) → Personal Story (connect) → 3 Core Points (inform) → Conclusion with Call to Action."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "How many core points should a TED Talk develop in the main body?",
+    options: ["One very detailed point", "Five points with equal time", "Three focused points", "As many points as possible"],
+    answer: 2,
+    feedback: "Three core points is the ideal structure — enough to feel substantial, focused enough to stay clear and memorable."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "What makes a TED Talk different from a typical classroom presentation?",
+    options: ["TED Talks are longer and use more text on slides", "TED Talks are personal, story-driven, and idea-focused", "TED Talks require formal academic citations", "TED Talks are always about technology"],
+    answer: 1,
+    feedback: "TED Talks are personal, story-driven, and focused on one powerful idea — not just information delivery."
+  },
+  {
+    section: "TED Talk Basics",
+    text: "Which of the following is a famous example of a very short TED Talk used in the lesson?",
+    options: ["Brené Brown on vulnerability (20 min)", "Matt Cutts – Try Something New for 30 Days (3 min)", "Sir Ken Robinson on education (18 min)", "Hans Rosling on data (10 min)"],
+    answer: 1,
+    feedback: "Matt Cutts' 3-minute talk was highlighted as a model of the short, powerful format students are aiming for."
+  },
+ 
+  // ── SECTION 2: Hook Types ────────────────────────────────────
+  {
+    section: "Hook Types",
+    text: "Which type of hook opens with a dramatic or surprising fact to instantly engage the audience?",
+    options: ["Story Opening", "Bold Statement", "Shocking Statistic", "Rhetorical Question"],
+    answer: 2,
+    feedback: "A Shocking Statistic hook uses a dramatic number or fact — e.g., 'Every 4 seconds, someone dies of hunger.'"
+  },
+  {
+    section: "Hook Types",
+    text: "Which hook type is this? — 'What if I told you the most powerful tool you have is also the one you use every day without thinking?'",
+    options: ["Shocking Statistic", "Story Opening", "Bold Statement", "Rhetorical Question"],
+    answer: 3,
+    feedback: "A Rhetorical Question invites the audience to think — it doesn't require an answer, it sparks curiosity."
+  },
+  {
+    section: "Hook Types",
+    text: "A Story Opening hook is most effective because it:",
+    options: ["Provides scientific data immediately", "Creates an emotional connection before the main idea", "Lists the three points of the talk", "Quotes a famous author"],
+    answer: 1,
+    feedback: "Story Openings work because humans are wired to respond to narrative — we connect emotionally before intellectually."
+  },
+  {
+    section: "Hook Types",
+    text: "Which hook type would begin with 'Kindness is not a weakness — it is the most powerful skill a human being can develop'?",
+    options: ["Shocking Statistic", "Rhetorical Question", "Story Opening", "Bold Statement"],
+    answer: 3,
+    feedback: "A Bold Statement makes a confident, surprising claim that forces the audience to stop and pay attention."
+  },
+  {
+    section: "Hook Types",
+    text: "How many hook types were introduced in the TED Talk lesson app?",
+    options: ["Two", "Three", "Four", "Five"],
+    answer: 2,
+    feedback: "The app introduced four hook types: Bold Statement, Rhetorical Question, Shocking Statistic, and Story Opening."
+  },
+  {
+    section: "Hook Types",
+    text: "Where in your TED Talk should the hook appear?",
+    options: ["At the end, as a dramatic conclusion", "In the middle, to re-engage the audience", "At the very beginning, as the first thing you say", "After you introduce your three points"],
+    answer: 2,
+    feedback: "The hook is always the very first thing you say — its job is to capture attention in the first 10–20 seconds."
+  },
+  {
+    section: "Hook Types",
+    text: "Which of the following is the BEST example of a Shocking Statistic hook?",
+    options: ["'Let me tell you about the day I changed my life.'", "'Imagine a world without kindness.'", "'7 out of 10 students say they feel too afraid to speak in public.'", "'I believe that every person has a story worth telling.'"],
+    answer: 2,
+    feedback: "The statistic '7 out of 10 students...' is a clear Shocking Statistic — specific, surprising, and relevant."
+  },
+  {
+    section: "Hook Types",
+    text: "Why is a hook so important at the start of a TED Talk?",
+    options: ["It shows the audience your outline", "It gives your name and topic immediately", "It grabs attention before the audience loses focus", "It proves your topic is academic"],
+    answer: 2,
+    feedback: "Research shows audiences decide whether to pay attention within the first 30 seconds — the hook is your chance to earn their attention."
+  },
+ 
+  // ── SECTION 3: Ikigai ───────────────────────────────────────
+  {
+    section: "Ikigai",
+    text: "What is Ikigai?",
+    options: ["A Japanese concept meaning 'reason for being' or life purpose", "A type of slide design popular in Japan", "An Arabic word for passion", "A speaking technique for reducing anxiety"],
+    answer: 0,
+    feedback: "Ikigai (生き甲斐) is a Japanese concept meaning your reason for being — the intersection of what you love, what you're good at, what the world needs, and what you can be paid for."
+  },
+  {
+    section: "Ikigai",
+    text: "In the Ikigai framework used in the lesson, how many quadrants does the diagram have?",
+    options: ["Two", "Three", "Four", "Six"],
+    answer: 2,
+    feedback: "The Ikigai diagram has four quadrants: What I Love, What I'm Good At, What the World Needs, and What I Can Be Paid For."
+  },
+  {
+    section: "Ikigai",
+    text: "In the TED Talk Ikigai tool, which quadrant helps you think about how your topic can help others?",
+    options: ["What I Love", "What I'm Good At", "What the World Needs", "What I Can Be Paid For"],
+    answer: 2,
+    feedback: "'What the World Needs' pushes students to connect their personal passion to a wider audience purpose."
+  },
+  {
+    section: "Ikigai",
+    text: "Why is Ikigai used as a topic-finding tool in the TED Talk lesson?",
+    options: ["Because TED requires all speakers to be Japanese", "Because it helps find a topic that is personal, meaningful, and relevant", "Because it is the most popular business framework", "Because it replaces the need for a hook"],
+    answer: 1,
+    feedback: "Ikigai helps students find a topic at the heart of what they care about, know well, and can share meaningfully — perfect for authentic TED Talks."
+  },
+  {
+    section: "Ikigai",
+    text: "If you complete the Ikigai tool and find the centre where all four quadrants overlap, what does that centre represent?",
+    options: ["Your presentation title", "Your personal mission — the ideal TED Talk topic", "The conclusion of your talk", "Your slide design style"],
+    answer: 1,
+    feedback: "The centre of the Ikigai diagram is your personal mission — the point where passion, skill, world need, and value all meet."
+  },
+ 
+  // ── SECTION 4: Personal Story & Structure ──────────────────
+  {
+    section: "Talk Structure",
+    text: "Why should you include a personal story in your TED Talk?",
+    options: ["To fill time and make the talk longer", "To prove that the talk topic happened to you", "To create an emotional connection with your audience", "Because the rubric requires exactly one story"],
+    answer: 2,
+    feedback: "Personal stories create emotional connection — they make audiences feel something, which makes them listen and remember."
+  },
+  {
+    section: "Talk Structure",
+    text: "Which of the following is the BEST description of a Call to Action in a TED Talk conclusion?",
+    options: ["A request for the audience to stop and ask questions", "A slide listing your references and sources", "A clear invitation for the audience to do, think, or feel something differently", "A summary of your three main points"],
+    answer: 2,
+    feedback: "A Call to Action ends the talk with purpose — it gives the audience something to do or think about after they leave."
+  },
+  {
+    section: "Talk Structure",
+    text: "In the example TED Talk about 'Kindness Can Change the World,' what was used as the hook?",
+    options: ["A shocking statistic about loneliness", "A rhetorical question about happiness", "A story about a personal act of kindness", "A bold statement about kindness being a skill"],
+    answer: 3,
+    feedback: "The example script opened with a bold statement: 'Kindness is not a weakness — it is one of the most powerful things a human being can do.'"
+  },
+  {
+    section: "Talk Structure",
+    text: "What language level were the example script and annotations written at?",
+    options: ["C1 Advanced", "B1 Intermediate", "A2 Elementary", "C2 Proficiency"],
+    answer: 1,
+    feedback: "The example script was simplified to B1 level to match the language level of LSC 1503 students."
+  },
+  {
+    section: "Talk Structure",
+    text: "After your personal story, what should come next in your TED Talk?",
+    options: ["The conclusion and Call to Action", "The hook", "The three core points or ideas", "Your slide list"],
+    answer: 2,
+    feedback: "After the personal story, you move into the three core points — the main content of your talk."
+  },
+  {
+    section: "Talk Structure",
+    text: "Which of the following should your TED Talk conclusion NOT do?",
+    options: ["Leave the audience with something to think about", "Introduce a completely new topic or idea", "End with an emotional or inspiring statement", "Connect back to your opening hook"],
+    answer: 1,
+    feedback: "A conclusion should close the loop — not open new ones. Introducing new ideas in the conclusion confuses the audience."
+  },
+ 
+  // ── SECTION 5: Visual Aids & Slides ────────────────────────
+  {
+    section: "Visual Aids & Slides",
+    text: "How many slides are recommended for a 3–5 minute TED Talk?",
+    options: ["1–2 slides with dense text", "5–8 clean, image-based slides", "15–20 slides with bullet points", "No slides — TED Talks never use visuals"],
+    answer: 1,
+    feedback: "5–8 slides is the recommended range — one per key moment, with images and minimal text."
+  },
+  {
+    section: "Visual Aids & Slides",
+    text: "What is 'Visual Zen' as described in the TED Talk lesson?",
+    options: ["A meditation technique for nervous speakers", "A Japanese presentation company", "The principle of using one powerful image with little or no text per slide", "Using zen-inspired colour palettes"],
+    answer: 2,
+    feedback: "Visual Zen means one impactful image, maximum 6 words — the opposite of cluttered, bullet-heavy slides."
+  },
+  {
+    section: "Visual Aids & Slides",
+    text: "Which of the following is a GOOD TED Talk slide?",
+    options: ["A slide with 8 bullet points explaining all your key ideas", "A slide that just shows the word 'HOPE' in large text over a powerful image", "A slide copied from a Wikipedia article", "A slide with your entire script written on it"],
+    answer: 1,
+    feedback: "The ideal TED slide is simple and striking — one word or image that supports what you're saying, not replaces it."
+  },
+  {
+    section: "Visual Aids & Slides",
+    text: "Why should slides in a TED Talk have MINIMAL text?",
+    options: ["Because audiences cannot read", "Because the audience should be listening to you, not reading your slides", "Because it is easier to make", "Because TED rules prohibit text on slides"],
+    answer: 1,
+    feedback: "If your audience is reading your slides, they're not listening to you. Slides support your words — they don't repeat them."
+  },
+  {
+    section: "Visual Aids & Slides",
+    text: "In the 'bad vs good' slide comparison shown in the lesson, what made the 'bad' slide easy to identify?",
+    options: ["It had beautiful images but no text", "It used too many bullet points and crowded information", "It was too colourful and distracting", "It only had one word on it"],
+    answer: 1,
+    feedback: "The bad slide was packed with bullet points and dense text — the opposite of the clear, image-focused TED style."
+  },
+  {
+    section: "Visual Aids & Slides",
+    text: "When choosing images for your TED Talk slides, what is most important?",
+    options: ["Use any image from Google Images without checking", "Use images that are free to use and support your message", "Use charts and data tables wherever possible", "Use images of yourself only"],
+    answer: 1,
+    feedback: "Always use copyright-free or properly licensed images that visually support your spoken message."
+  },
+ 
+  // ── SECTION 6: Assessment ───────────────────────────────────
+  {
+    section: "Assessment",
+    text: "What percentage is the Final Practical Presentation worth in LSC 1503?",
+    options: ["10%", "25%", "40%", "60%"],
+    answer: 2,
+    feedback: "The Final Practical Presentation (Week 15) is worth 40% of the total course grade."
+  },
+  {
+    section: "Assessment",
+    text: "The Oral Defense immediately follows your presentation. What percentage is it worth?",
+    options: ["5%", "10%", "20%", "40%"],
+    answer: 1,
+    feedback: "The Oral Defense is worth 10% — your teacher asks questions to verify the work is genuinely yours."
+  },
+  {
+    section: "Assessment",
+    text: "What is the main purpose of the Oral Defense in the assessment?",
+    options: ["To allow you to add extra slides you forgot", "To test your vocabulary in isolation", "To verify the work is your own by asking about your choices and process", "To give you time to correct pronunciation errors"],
+    answer: 2,
+    feedback: "The Oral Defense proves authenticity — questions like 'Why this design?' or 'How did you develop your hook?' check that the work is genuinely yours."
+  },
+  {
+    section: "Assessment",
+    text: "In the Final Practical Presentation rubric, 'Quality of Spoken Content' is worth which percentage?",
+    options: ["10%", "25%", "40%", "50%"],
+    answer: 2,
+    feedback: "Quality of Spoken Content accounts for 40% of the Final Practical Presentation mark — the most heavily weighted criterion."
+  },
+  {
+    section: "Assessment",
+    text: "The Part 1 assessment (One Slide Preview) takes place in which week?",
+    options: ["Week 5", "Week 10", "Week 13", "Week 15"],
+    answer: 2,
+    feedback: "Part 1 is the One Slide Preview, presented in Week 13, worth 10% of the course grade."
+  },
+  {
+    section: "Assessment",
+    text: "In the Final Practical Presentation rubric, which of these is a separate assessed criterion?",
+    options: ["Grammar accuracy only", "Organisation & Slides/Visuals", "Vocabulary memorisation", "Length of talk in seconds"],
+    answer: 1,
+    feedback: "Organisation & Slides/Visuals is one of four rubric criteria in the Final Practical Presentation."
+  },
+ 
+  // ── SECTION 7: Non-verbal & Communication ─────────────────
+  {
+    section: "Non-verbal Communication",
+    text: "Which of these is an example of NON-VERBAL communication?",
+    options: ["The words you choose in your script", "Your eye contact, posture, and hand gestures", "Your slide titles", "The length of your hook"],
+    answer: 1,
+    feedback: "Non-verbal communication includes body language: eye contact, facial expression, posture, gestures, and movement."
+  },
+  {
+    section: "Non-verbal Communication",
+    text: "Why is eye contact important during a TED Talk?",
+    options: ["It helps you read your script more easily", "It makes the audience feel connected and engaged with you", "It shows the audience where to look on your slides", "It is required by TED rules"],
+    answer: 1,
+    feedback: "Eye contact creates a personal connection — it signals confidence and draws the audience into your message."
+  },
+  {
+    section: "Non-verbal Communication",
+    text: "In the peer feedback form for TED Talks, what body language element was checked by peers?",
+    options: ["Grammar and vocabulary accuracy", "Non-verbal communication (eye contact, gestures, posture)", "The number of slides used", "Word count of the script"],
+    answer: 1,
+    feedback: "The peer feedback form included a specific check on non-verbal communication as evidence of presentation skills."
+  },
+  {
+    section: "Non-verbal Communication",
+    text: "If a presenter keeps looking at their notes throughout their TED Talk, what is the main problem?",
+    options: ["Their vocabulary may not be at C1 level", "They lose connection with the audience and appear less confident", "Their slides will not display correctly", "The assessment requires no notes at all"],
+    answer: 1,
+    feedback: "Over-reliance on notes breaks audience connection and signals a lack of preparation and confidence."
+  },
+ 
+  // ── SECTION 8: Common Sense & General Knowledge ───────────
+  {
+    section: "Common Sense",
+    text: "You are about to give your TED Talk and you feel very nervous. What is the BEST thing to do?",
+    options: ["Read your script word for word so you don't forget anything", "Practise deeply and focus on your message, not your nerves", "Speak as quickly as possible to finish sooner", "Skip the hook and go straight to your points"],
+    answer: 1,
+    feedback: "Preparation is the best cure for nerves — when you know your content deeply, you can focus on connecting with the audience."
+  },
+  {
+    section: "Common Sense",
+    text: "A classmate's TED Talk slide has 10 bullet points in small text. What would you suggest to improve it?",
+    options: ["Add more text so the audience understands everything", "Use a table instead of bullet points", "Replace the text with one powerful image and speak the points aloud", "Use a bigger font so people can read it"],
+    answer: 2,
+    feedback: "Visual Zen: remove the text, choose one impactful image, and deliver the key points through your voice, not your slide."
+  },
+  {
+    section: "Common Sense",
+    text: "Which topic would be MOST suitable for a personal TED Talk?",
+    options: ["A historical account of World War II copied from a textbook", "'How learning to cook taught me about patience and culture'", "A full grammar lesson on the present perfect tense", "A product advertisement for a mobile phone"],
+    answer: 1,
+    feedback: "The best TED topics are personal, meaningful, and connect to a universal human experience — like life lessons from cooking."
+  },
+  {
+    section: "Common Sense",
+    text: "Your friend says: 'I'll just make it up as I go — I don't need to prepare.' What is the problem with this approach?",
+    options: ["It is fine — all great speakers are spontaneous", "Without preparation, you are likely to miss key points, lose structure, and exceed the time limit", "TED rules say you must prepare for exactly 3 hours", "Preparation only matters for advanced speakers"],
+    answer: 1,
+    feedback: "Preparation is essential — structure, timing, and confidence all come from practising your talk multiple times before delivering it."
+  }
+];
+ 
+// ── RENDER QUESTIONS ──────────────────────────────────────────
+let answered = new Array(questions.length).fill(null);
+let submitted = false;
+ 
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+  let currentSection = '';
+  let html = '';
+ 
+  questions.forEach((q, i) => {
+    if (q.section !== currentSection) {
+      currentSection = q.section;
+      html += `
+        <div class="section-divider" style="max-width:760px;margin:${i===0?'0':'24px'} auto 16px;padding:0 24px;">
+          <div class="section-line"></div>
+          <span>${currentSection}</span>
+          <div class="section-line"></div>
+        </div>`;
+    }
+ 
+    const letters = ['A','B','C','D'];
+    const optsHtml = q.options.map((opt, j) =>
+      `<div class="opt" id="opt-${i}-${j}" onclick="selectAnswer(${i},${j})">
+        <span class="opt-letter">${letters[j]}</span>
+        <span>${opt}</span>
+      </div>`
+    ).join('');
+ 
+    html += `
+      <div class="questions-wrap" style="padding-top:0;padding-bottom:0;gap:0;">
+        <div class="q-card" id="qcard-${i}">
+          <div class="q-num">Q${String(i+1).padStart(2,'0')} <span class="q-tag">${q.section}</span></div>
+          <div class="q-text">${q.text}</div>
+          <div class="options">${optsHtml}</div>
+          <div class="feedback-msg" id="fb-${i}"></div>
+        </div>
+      </div>`;
+  });
+ 
+  container.innerHTML = html;
+}
+ 
+function selectAnswer(qi, optIdx) {
+  if (submitted) return;
+  if (answered[qi] !== null) return; // one attempt before submit
+ 
+  answered[qi] = optIdx;
+ 
+  // Highlight selected
+  const letters = ['A','B','C','D'];
+  document.querySelectorAll(`[id^="opt-${qi}-"]`).forEach(el => el.classList.remove('selected'));
+  document.getElementById(`opt-${qi}-${optIdx}`).classList.add('selected');
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
+ 
+  updateProgress();
+}
+ 
+function updateProgress() {
+  const count = answered.filter(a => a !== null).length;
+  const pct = Math.round(count / questions.length * 100);
+  document.getElementById('progLabel').textContent = `${count} / ${questions.length} answered`;
+  document.getElementById('progPct').textContent = `${pct}%`;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+ 
+function submitQuiz() {
+  const unanswered = answered.filter(a => a === null).length;
+  if (unanswered > 0) {
+    alert(`You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. Please answer all questions before submitting.`);
+    return;
+  }
+ 
+  submitted = true;
+  document.getElementById('submitBtn').disabled = true;
+ 
+  let correct = 0;
+  questions.forEach((q, i) => {
+    const userAns = answered[i];
+    const isCorrect = userAns === q.answer;
+    if (isCorrect) correct++;
+ 
+    const letters = ['A','B','C','D'];
+    document.querySelectorAll(`[id^="opt-${i}-"]`).forEach((el, j) => {
+      el.classList.add('disabled');
+      el.classList.remove('selected');
+      if (j === q.answer) el.classList.add(isCorrect && j === userAns ? 'correct' : 'reveal');
+      if (j === userAns && !isCorrect) el.classList.add('wrong');
+    });
+ 
+    const card = document.getElementById(`qcard-${i}`);
+    card.classList.remove('answered');
+    card.classList.add(isCorrect ? 'correct-card' : 'wrong-card');
+ 
+    const fb = document.getElementById(`fb-${i}`);
+    fb.classList.add('show', isCorrect ? 'ok' : 'err');
+    fb.textContent = (isCorrect ? '✓ Correct! ' : '✗ Not quite. ') + q.feedback;
+  });
+ 
+  showResults(correct);
+}
+ 
+function showResults(correct) {
+  const total = questions.length;
+  const pct = Math.round(correct / total * 100);
+  const passed = pct >= 80;
+ 
+  document.getElementById('resPct').textContent = pct + '%';
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = total - correct;
+  document.getElementById('resTotal').textContent = total;
+ 
+  if (passed) {
+    document.getElementById('resTitle').textContent = '🎉 Congratulations — You Passed!';
+    document.getElementById('resSub').textContent = `Excellent work! You scored ${pct}% and have demonstrated strong knowledge of TED Talk structure, hooks, Ikigai, visual design, and assessment requirements.`;
+    document.getElementById('certBtn').style.display = 'inline-block';
+  } else {
+    document.getElementById('resTitle').textContent = 'Keep Practising — Almost There!';
+    document.getElementById('resSub').textContent = `You scored ${pct}%. You need 80% (32/40) to pass. Review the feedback on each question and try again — you can do it!`;
+  }
+ 
+  const panel = document.getElementById('resultsPanel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+ 
+function showCert() {
+  const correct = answered.filter((a, i) => a === questions[i].answer).length;
+  const pct = Math.round(correct / questions.length * 100);
+  const name = document.getElementById('stuName').value.trim() || 'Student';
+  const id   = document.getElementById('stuId').value.trim();
+ 
+  document.getElementById('certName').textContent = name;
+  document.getElementById('certId').textContent   = id ? `Student ID: ${id}` : '';
+  document.getElementById('certScore').textContent = `Score: ${correct} / ${questions.length} · ${pct}%`;
+ 
+  const now = new Date();
+  document.getElementById('certDate').textContent = `Issued on ${now.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}`;
+ 
+  const certSection = document.getElementById('certSection');
+  certSection.style.display = 'block';
+  certSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+ 
+function retryQuiz() {
+  submitted = false;
+  answered = new Array(questions.length).fill(null);
+  renderQuestions();
+  updateProgress();
+  document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('certSection').style.display = 'none';
+  document.getElementById('submitBtn').disabled = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+ 
+renderQuestions();
+</script>
+</body>
+</html>
